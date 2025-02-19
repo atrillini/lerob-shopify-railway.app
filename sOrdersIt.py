@@ -184,4 +184,6 @@ if(ordsIt) :
                 shopify.createOrder(order)
                 updateOrderSpartooIt(order['orders_id'])
 
+else:
+    print('non c'è nessuno ordine da processare')
 
