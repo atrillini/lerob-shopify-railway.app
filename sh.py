@@ -11,10 +11,10 @@ import mysql.connector
 
 API_KEY = os.getenv("shopify_api_key")
 API_SECRET_KEY = os.getenv("shopify_api_secret")
-API_PASSWORD = os.getenv("shopify-api_password")
+API_PASSWORD = os.getenv("shopify_api_password")
 API_VERSION = '2023-04'
-SHOP_URL = os.getenv("shopify-url")
-LOCATION_ID = os.getenv("shopify-location_id")
+SHOP_URL = os.getenv("shopify_url")
+LOCATION_ID = os.getenv("shopify_location_id")
 ENDPOINT = 'https://' + API_KEY + ':' + API_PASSWORD + '@' + SHOP_URL + '/admin'
     
 class Sh:
