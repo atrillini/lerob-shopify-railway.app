@@ -9,14 +9,14 @@ from constants import bcolors
 from shopify import ApiVersion, Release
 import mysql.connector
 
-API_KEY = '0fa84da357c0f58a6a9cf7e25fea63ee'
-API_SECRET_KEY = '9ff9b9b0c5d0a622b9bb7d521c854e5c'
-API_PASSWORD = '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'
+API_KEY = os.getenv("shopify_api_key")
+API_SECRET_KEY = os.getenv("shopify_api_secret")
+API_PASSWORD = os.getenv("shopify-api_password")
 API_VERSION = '2023-04'
-SHOP_URL = 'lerobshop.myshopify.com'
-LOCATION_ID = '81131209001'
+SHOP_URL = os.getenv("shopify-url")
+LOCATION_ID = os.getenv("shopify-location_id")
 ENDPOINT = 'https://' + API_KEY + ':' + API_PASSWORD + '@' + SHOP_URL + '/admin'
-
+    
 class Sh:
 
         
