@@ -94,13 +94,14 @@ def mapData(fpath):
     return pdict
 
 cfg = {
-    'mysql': {
+     'mysql': {
         'host': 'crossover.proxy.rlwy.net',
         'db_user': 'root',
         'db_password': 'ICReplqqhsfqsimGVguywqGrBtvVWAWJ',
-        'db_name': 'lerob_orders',
+        'port':'22694',
+        'db_name': 'railway',
         'orders_table': 'orders',
-        'port':'22694'
+       
     }
 }
 prods = mapData('https://oldstore.lerobshop.com/import/csv/export_man.csv')
