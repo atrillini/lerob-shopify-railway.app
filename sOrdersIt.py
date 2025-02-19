@@ -113,9 +113,10 @@ cfg = {
         'host': 'crossover.proxy.rlwy.net',
         'db_user': 'root',
         'db_password': 'ICReplqqhsfqsimGVguywqGrBtvVWAWJ',
-        'db_name': 'lerob_orders',
+        'port':'22694',
+        'db_name': 'railway',
         'orders_table': 'orders',
-        'port':'22694'
+       
     }
 }
 
