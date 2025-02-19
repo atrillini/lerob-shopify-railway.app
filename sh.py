@@ -1,7 +1,7 @@
 # type: ignore
 import shopify
 import json
-import os.path
+import os
 from time import sleep
 from datetime import date
 from pathlib import Path
