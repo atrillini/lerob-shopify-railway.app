@@ -16,6 +16,7 @@ LEROB_ID = 'AE6F6B21EC88DFB0'
 URL_SPARTOO_CONFIRM = 'https://sws.spartoo.it/mp/xml_maj_orders.php'
 URL_SPARTOO_CONFIRM_FR = 'https://sws.spartoo.com/mp/xml_maj_orders.php'
 URL_SPARTOO_CONFIRM_DE = 'https://sws.spartoo.de/mp/xml_maj_orders.php'
+URL_SPARTOO_CONFIRM_ES = 'https://sws.spartoo.es/mp/xml_maj_orders.php'
 
 
 
@@ -40,6 +41,19 @@ def getSOrdersIta():
     res = requests.post(URL_ITA, params=data)
   
     return xmltodict.parse(res.content)['root']['orders']
+
+def getSOrdersEs():
+    target_date = datetime.now() - timedelta(days=10)
+    URL_ES = 'https://sws.spartoo.es/mp/xml_export_orders.php'
+    data = {
+        'partner': LEROB_ID, 
+        'date': target_date.strftime("%Y-%m-%d:00:00:00"),
+        'status': '11'
+    }
+    res = requests.post(URL_ES, params=data)
+  
+    return xmltodict.parse(res.content)['root']['orders']
+
 
 def getSOrdersDe():
     target_date = datetime.now() - timedelta(days=10)
@@ -81,6 +95,16 @@ def updateOrderSpartooFr(id):
         'statut': '2'
     }
     res = requests.post(URL_SPARTOO_CONFIRM_FR, params=data)
+    return xmltodict.parse(res.content)
+
+def updateOrderSpartooEs(id):
+    
+    data = {
+        'partenaire': LEROB_ID, 
+        'oID': id,
+        'statut': '2'
+    }
+    res = requests.post(URL_SPARTOO_CONFIRM_ES, params=data)
     return xmltodict.parse(res.content)
 
 def updateOrderSpartooDe(id):
@@ -125,6 +149,9 @@ dbconn = dbConnect(cfg['mysql'])
 cur = dbconn.cursor(buffered=True)
 ordsIt = getSOrdersIta()
 ordsFr = getSOrdersFr()
+ordsDe = getSOrdersDe()
+ordsEs = getSOrdersEs()
+
 shopify = Sh()
 #shopify.createOrder(ords)
 
@@ -186,5 +213,179 @@ if(ordsIt) :
                 updateOrderSpartooIt(order['orders_id'])
 
 else:
-    print('nessun ordine da processare')
+    print('nessun ordine IT da processare')
+
+if(ordsFr) :
+            
+           
+            orders = ordsFr.get("order")
+
+            if isinstance(orders, dict):  # Caso di un solo ordine (dizionario)
+                orders = [orders]  # Convertiamo in lista per uniformità
+            
+            for order in orders:
+                        
+                
+                       
+                products = order.get("products", {}).get("product", [])
+                if isinstance(products, dict):
+                    products = [products]
+                
+                for product in products:
+                        reference = product.get("products_size_reference", "N/A")
+                        product_name = product.get("products_name", "N/A")
+                        product_qty = product.get("products_qty", "N/A")
+                        product_size = product.get("products_size", "N/A")
+                        product_price = product.get("products_final_price", "N/A")
+                        shid = dbgetIdbySku(cur,reference)
+                        if shid and len(shid) > 1:
+                            product["product_variant_id"] = shid[1]
+                        else:
+                            stockReset(reference)
+                            time.sleep(2)
+                            # 🔄 Forza la chiusura e la riapertura della connessione al DB
+                            cur.close()
+                            dbconn.close()
+                            time.sleep(1)  # Aspetta un secondo per sicurezza
+
+                            # Riapri la connessione
+                            dbconn = dbConnect(cfg['mysql'])  # Usa la tua funzione per creare la connessione
+                            cur = dbconn.cursor()
+                            # 🔄 Loop per verificare se `shid` è stato aggiornato
+                            retry_count = 5  # Numero massimo di tentativi
+                            while retry_count > 0:
+                                shid = dbgetIdbySku(cur, reference)
+                                if shid and len(shid) > 1:
+                                    break  # Esci dal loop se trovi il valore
+                                print("⚠️ Attesa aggiornamento database...")
+                                time.sleep(1)
+                                retry_count -= 1
+                            if not shid:
+                                raise ValueError(f"❌ Errore: SKU {reference} non trovato dopo il reset!")
+                            shid = dbgetIdbySku(cur,reference)
+                        product["product_variant_id"] = shid[1]
+                      
+                        
+               
+                shopify.createOrder(order)
+                updateOrderSpartooFr(order['orders_id'])
+
+else:
+    print('nessun ordine Fr da processare')
+
+if(ordsDe) :
+            
+           
+            orders = ordsDe.get("order")
+
+            if isinstance(orders, dict):  # Caso di un solo ordine (dizionario)
+                orders = [orders]  # Convertiamo in lista per uniformità
+            
+            for order in orders:
+                        
+                
+                       
+                products = order.get("products", {}).get("product", [])
+                if isinstance(products, dict):
+                    products = [products]
+                
+                for product in products:
+                        reference = product.get("products_size_reference", "N/A")
+                        product_name = product.get("products_name", "N/A")
+                        product_qty = product.get("products_qty", "N/A")
+                        product_size = product.get("products_size", "N/A")
+                        product_price = product.get("products_final_price", "N/A")
+                        shid = dbgetIdbySku(cur,reference)
+                        if shid and len(shid) > 1:
+                            product["product_variant_id"] = shid[1]
+                        else:
+                            stockReset(reference)
+                            time.sleep(2)
+                            # 🔄 Forza la chiusura e la riapertura della connessione al DB
+                            cur.close()
+                            dbconn.close()
+                            time.sleep(1)  # Aspetta un secondo per sicurezza
+
+                            # Riapri la connessione
+                            dbconn = dbConnect(cfg['mysql'])  # Usa la tua funzione per creare la connessione
+                            cur = dbconn.cursor()
+                            # 🔄 Loop per verificare se `shid` è stato aggiornato
+                            retry_count = 5  # Numero massimo di tentativi
+                            while retry_count > 0:
+                                shid = dbgetIdbySku(cur, reference)
+                                if shid and len(shid) > 1:
+                                    break  # Esci dal loop se trovi il valore
+                                print("⚠️ Attesa aggiornamento database...")
+                                time.sleep(1)
+                                retry_count -= 1
+                            if not shid:
+                                raise ValueError(f"❌ Errore: SKU {reference} non trovato dopo il reset!")
+                            shid = dbgetIdbySku(cur,reference)
+                        product["product_variant_id"] = shid[1]
+                      
+                        
+               
+                shopify.createOrder(order)
+                updateOrderSpartooDe(order['orders_id'])
+
+else:
+    print('nessun ordine DE da processare')
+
+if(ordsEs) :
+            
+           
+            orders = ordsEs.get("order")
+
+            if isinstance(orders, dict):  # Caso di un solo ordine (dizionario)
+                orders = [orders]  # Convertiamo in lista per uniformità
+            
+            for order in orders:
+                        
+                
+                       
+                products = order.get("products", {}).get("product", [])
+                if isinstance(products, dict):
+                    products = [products]
+                
+                for product in products:
+                        reference = product.get("products_size_reference", "N/A")
+                        product_name = product.get("products_name", "N/A")
+                        product_qty = product.get("products_qty", "N/A")
+                        product_size = product.get("products_size", "N/A")
+                        product_price = product.get("products_final_price", "N/A")
+                        shid = dbgetIdbySku(cur,reference)
+                        if shid and len(shid) > 1:
+                            product["product_variant_id"] = shid[1]
+                        else:
+                            stockReset(reference)
+                            time.sleep(2)
+                            # 🔄 Forza la chiusura e la riapertura della connessione al DB
+                            cur.close()
+                            dbconn.close()
+                            time.sleep(1)  # Aspetta un secondo per sicurezza
+
+                            # Riapri la connessione
+                            dbconn = dbConnect(cfg['mysql'])  # Usa la tua funzione per creare la connessione
+                            cur = dbconn.cursor()
+                            # 🔄 Loop per verificare se `shid` è stato aggiornato
+                            retry_count = 5  # Numero massimo di tentativi
+                            while retry_count > 0:
+                                shid = dbgetIdbySku(cur, reference)
+                                if shid and len(shid) > 1:
+                                    break  # Esci dal loop se trovi il valore
+                                print("⚠️ Attesa aggiornamento database...")
+                                time.sleep(1)
+                                retry_count -= 1
+                            if not shid:
+                                raise ValueError(f"❌ Errore: SKU {reference} non trovato dopo il reset!")
+                            shid = dbgetIdbySku(cur,reference)
+                        product["product_variant_id"] = shid[1]
+                      
+                        
+               
+                shopify.createOrder(order)
+                updateOrderSpartooEs(order['orders_id'])
+
+else:
+    print('nessun ordine ES da processare')
 
