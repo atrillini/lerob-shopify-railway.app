@@ -185,5 +185,5 @@ if(ordsIt) :
                 updateOrderSpartooIt(order['orders_id'])
 
 else:
-    print('non c'è nessuno ordine da processare')
+    print('nessun ordine da processare')
 
