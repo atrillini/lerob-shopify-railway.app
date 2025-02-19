@@ -95,11 +95,12 @@ def mapData(fpath):
 
 cfg = {
     'mysql': {
-        'host': '35.205.119.178',
+        'host': 'crossover.proxy.rlwy.net',
         'db_user': 'root',
-        'db_password': '8iNL4BM7ij7HsFPE',
+        'db_password': 'ICReplqqhsfqsimGVguywqGrBtvVWAWJ',
         'db_name': 'lerob_orders',
-        'orders_table': 'orders'
+        'orders_table': 'orders',
+        'port':'22694'
     }
 }
 prods = mapData('https://oldstore.lerobshop.com/import/csv/export_man.csv')
