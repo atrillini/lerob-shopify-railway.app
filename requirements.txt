@@ -7,3 +7,4 @@ mysql-connector-python
 google-cloud-storage
 gspread
 oauth2client
+xmltodict
