@@ -339,45 +339,18 @@ class Sh:
                 'inv_id': v.inventory_item_id
             })
       
-        self.updateStock(variantsQuantity)
+        self.update_stock(v.inventory_item_id,qty)
         sleep(1)
     
-    def updateStock(self, data):
-       
-        document = Path("./queries.graphql").read_text()
-
-        query_data = {
-            "inventoryItemAdjustments": [],
-            "locationId": "gid://shopify/Location/" + LOCATION_ID
-        }
-
-        
-
-        for el in data:
-            query_data['inventoryItemAdjustments'].append(
-                {
-                    "availableDelta": el['qty'],
-                    "inventoryItemId": "gid://shopify/InventoryItem/" + str(el['inv_id'])
-                }
-            )
-        
-        
-        session = shopify.Session(SHOP_URL, API_VERSION, API_PASSWORD)
-        
-        shopify.ShopifyResource.activate_session(session)
-
-        
-        result = json.loads(shopify.GraphQL().execute(
-            query=document,
-            variables=query_data,
-            operation_name="ActivateInventoryItem"
-        ))
-        
-                        
-        #if(not result['data']['inventoryBulkAdjustQuantityAtLocation']['userErrors']):
-            #print(bcolors.OKGREEN + '[+] Variants updated' + bcolors.ENDC)
-        #else:
-            #print(bcolors.FAIL + 'Error while updating stock' + bcolors.ENDC)
+    def update_stock(self, inv_id, qty):
+        # time.sleep(0.5)
+      
+        try:
+            inv_l = shopify.InventoryLevel.set(LOCATION_ID, inv_id, qty)
+            return inv_l.available == qty
+        except Exception as e:
+            print(e)
+            return False
     
     
     def updateStockS(self, data):
