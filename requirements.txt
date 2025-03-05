@@ -10,5 +10,4 @@ oauth2client
 xmltodict
 sib_api_v3_sdk
 ftpretty
-ftplib
 bs4
