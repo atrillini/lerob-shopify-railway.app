@@ -2,8 +2,9 @@
 from sh import Sh
 import mysql.connector
 from bs4 import BeautifulSoup
-from google.cloud import storage
 from time import sleep
+from ftplib import FTP
+
 
 
 
@@ -17,10 +18,7 @@ def dbConnect(mysql_cfg):
     )
 
 def generateFeed(prods):
-    storage_client = storage.Client()
-    bucket = storage_client.get_bucket('lerob-shopify')
-
-    blob = bucket.blob('feed.xml')
+    
     
     cfg = {
     'mysql': {
@@ -33,7 +31,11 @@ def generateFeed(prods):
        
     }
         }
-
+    # Dati di connessione FTP
+    ftp_host = "135.181.228.103"  # Indirizzo FTP
+    ftp_user = "leroboldstore"         # Nome utente
+    ftp_pass = "N25#9EpJhn"         # Password
+    remote_path = "httpdocs/import/spartoo/"    # Percorso remoto dove salvare il file
     dbconn = dbConnect(cfg['mysql'])
     cur = dbconn.cursor()
     feed = '<?xml version="1.0"?>'
@@ -118,11 +120,29 @@ def generateFeed(prods):
         feed += '</product>'
         sleep(1)
     feed += '</products></root>'
-    blob.upload_from_string(feed)
-    blob.acl.reload()
-    acl = blob.acl
-    acl.all().grant_read()
-    acl.save()
+    
+
+    # Creare e scrivere su un file
+    file_path = "feed.xml"
+
+    # Connessione al server FTP
+    ftp = FTP(ftp_host)
+    ftp.login(ftp_user, ftp_pass)
+
+    with open(file_path, "w", encoding="utf-8") as file:
+        file.write(feed)
+   
+    print(f"✅ File '{file_path}' creato con successo!")
+
+    # Aprire il file e inviarlo via FTP
+    with open(file_path, "rb") as file:
+        ftp.storbinary(f"STOR {remote_path}feed.xml", file)
+
+    # Chiudere la connessione FTP
+    ftp.quit()
+
+    print(f"✅ File '{file_path}' inviato con successo a '{ftp_host}'!")
+    
     
 def getProductSku(variants):
     if not variants:
