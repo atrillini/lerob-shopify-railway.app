@@ -8,3 +8,6 @@ google-cloud-storage
 gspread
 oauth2client
 xmltodict
+sib_api_v3_sdk
+ftpretty
+bs4
