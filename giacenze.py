@@ -16,6 +16,7 @@ def dbConnect(mysql_cfg):
         user=mysql_cfg['db_user'],
         password=mysql_cfg['db_password'],
         host=mysql_cfg['host'],
+        port=mysql_cfg['port'],
         database=mysql_cfg['db_name']
     )
 
