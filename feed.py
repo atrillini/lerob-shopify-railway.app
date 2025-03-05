@@ -195,3 +195,5 @@ def mainFeed():
     prods = shopify.getAllProducts()
     feed = generateFeed(prods)
     return 'feed generato correttamente'
+
+mainFeed()
