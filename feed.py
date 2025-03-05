@@ -7,12 +7,12 @@ from time import sleep
 
 
 
-
 def dbConnect(mysql_cfg):
     return mysql.connector.connect(
         user=mysql_cfg['db_user'],
         password=mysql_cfg['db_password'],
         host=mysql_cfg['host'],
+        port=mysql_cfg['port'],
         database=mysql_cfg['db_name']
     )
 
