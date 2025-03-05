@@ -82,7 +82,10 @@ def generateFeed(prods):
             feed += '<language>'
             feed += '<code>' + lang + '</code>'
             feed += '<product_name>'+namePr+'</product_name>'
-            feed += '<product_description>'+soup+'</product_description>'
+            if(lang == 'IT'):
+                feed += '<product_description>'+soup+'</product_description>'
+            else:
+                feed += '<product_description></product_description>'
             feed += '<product_color></product_color>'
             if priceData['compare'] and float(priceData['compare']) > 0:
                 feed += '<product_price>' + priceData['compare'] + '</product_price>'
