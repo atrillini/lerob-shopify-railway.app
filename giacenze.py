@@ -122,14 +122,15 @@ def mapData(fpath):
             })
     return pdict
 
-    
 cfg = {
     'mysql': {
-        'host': '35.205.119.178',
+        'host': 'crossover.proxy.rlwy.net',
         'db_user': 'root',
-        'db_password': '8iNL4BM7ij7HsFPE',
-        'db_name': 'lerob_orders',
-        'orders_table': 'orders'
+        'db_password': 'MktJYSAiWiGSTrRiyxZgTuFvVEHVbQiR',
+        'port':'22694',
+        'db_name': 'railway',
+        'orders_table': 'orders',
+       
     }
 }
 
