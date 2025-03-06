@@ -54,7 +54,7 @@ def generateFeed(prods):
             print('non ho trovato il code spartoo per ' + str(prod.variants))
         else: 
             codeSpartoo = codeSpartoo[7]
-        namePr = prod.product_type + ' ' + prod.vendor + ' ' + getGenderName(sku) 
+        namePr = prod.product_type + ' ' + getGenderName(sku) 
         descr = prod.body_html
         soup = BeautifulSoup(descr,features="html.parser").get_text()
         feed += '<product>'
@@ -81,11 +81,13 @@ def generateFeed(prods):
         for lang in ['IT','FR','ES','DE']:
             feed += '<language>'
             feed += '<code>' + lang + '</code>'
-            feed += '<product_name>'+namePr+'</product_name>'
+            
             if(lang == 'IT'):
                 feed += '<product_description>'+soup+'</product_description>'
+                feed += '<product_name>'+namePr+'</product_name>'
             else:
                 feed += '<product_description></product_description>'
+                feed += '<product_name></product_name>'
             feed += '<product_color></product_color>'
             if priceData['compare'] and float(priceData['compare']) > 0:
                 feed += '<product_price>' + priceData['compare'] + '</product_price>'
