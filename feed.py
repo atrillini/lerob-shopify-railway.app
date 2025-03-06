@@ -99,7 +99,6 @@ def generateFeed(prods):
                 feed += '<product_price>' + priceData['price'] + '</product_price>'
             feed += '</language>'
         feed += '</languages>'
-        feed += '<product_description>'+soup+'</product_description>'
         feed += '<product_color>' + getColor(prod.metafields()) + '</product_color>'
         feed += '<size_list>'
         for v in prod.variants:
