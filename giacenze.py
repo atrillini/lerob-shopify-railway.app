@@ -203,9 +203,8 @@ for key in stocks:
             print(bcolors.OKGREEN + 'aggiorno giacenza prodotto ' + str(resvariant[5]) +  ' -> ' + 'nuova giacenza ' + str(data['qty']) +  bcolors.ENDC)
             shopify.update_stock(data['inv_id'],data['qty'])
             dbUpdateQtytocks(dbconn,cur,resvariant[1],data['qty'])
-            
-     requests.delete('http://93.147.145.116:11111/SRWebApi/api/SALDI/'+str(idgestionale))
-     print(bcolors.OKGREEN + 'cancello da gestionale la referenza id  ' + str(idgestionale) + bcolors.ENDC)
+            requests.delete('http://93.147.145.116:11111/SRWebApi/api/SALDI/'+str(idgestionale))
+            print(bcolors.OKGREEN + 'cancello da gestionale la referenza id  ' + str(idgestionale) + bcolors.ENDC)
      
 
          
