@@ -10,6 +10,7 @@ from datetime import date, timedelta
 from ftplib import FTP
 from minio import Minio
 from minio.error import S3Error
+from sh import Sh
 
 
 cfg = {
@@ -186,6 +187,7 @@ def process_orders(blob,bucket):
     }
     }
 
+    shopify = Sh()
      # Configura il client MinIO
     minio_client = Minio(
               endpoint="bucket-production-51bd.up.railway.app:443",  # Solo il dominio, senza https://
