@@ -228,7 +228,7 @@ def process_orders():
         #f = open('orders_to_adhoc/'+orderInfo['name'].replace('#','')+'.csv', 'w')
         #writer = csv.writer(f, delimiter=';')
        
-        local_file = f"/tmp/{orderInfo['name'].replace('#', '')}.csv"
+        local_file = "/tmp/orderInfo['name'].replace('#', '').csv"
         f = open(local_file, 'w')
         writer = csv.writer(f, delimiter=';')
         
@@ -243,7 +243,8 @@ def process_orders():
             #writer.writerow(mappedData)
             #write_to_file(mappedData, blob_order)
             # set public access
-
+        f.flush()  # Forza la scrittura sul disco
+        f.close()  # Chiude il file
         # Carica il file su MinIO
         object_name = orderInfo['name'].replace('#','')+'.csv'
         minio_client.fput_object(
@@ -258,13 +259,16 @@ def process_orders():
         ftp.cwd('magento/ORDINI')
        
         filename = orderInfo['name'].replace('#','')+'.csv'
-        with local_file.open("rb") as file:
-            ftp.storbinary("STOR " + filename,file)
-        
+        with open(local_file, "rb") as file:  # Apri il file in modalità binaria
+            ftp.storbinary(f"STOR {filename}", file)
         ftp.quit()
        
-
         print('file ordine ' + orderInfo['name'] +  ' -> ' + 'inviato nel server del cliente')
+
+        os.remove(local_file)
+        print(f"File locale '{local_file}' rimosso.")
+       
+
         dbAddOrder(conn, cur, (o.id, orderInfo['name'], orderInfo['email'],orderInfo['totalPriceSet']['presentmentMoney']['amount'], orderInfo['createdAt'], '1'))
         sleep(1)
     return "{ordini importati correttamente}"
