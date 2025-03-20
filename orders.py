@@ -226,7 +226,7 @@ def process_orders(blob,bucket):
         #f = open('orders_to_adhoc/'+orderInfo['name'].replace('#','')+'.csv', 'w')
         #writer = csv.writer(f, delimiter=';')
        
-        local_file = "/tmp/"+orderInfo['name'].replace('#','')+'.csv
+        local_file = f"/tmp/{orderInfo['name'].replace('#', '')}.csv"
         f = open(local_file, 'w')
         writer = csv.writer(f, delimiter=';')
         
