@@ -1,0 +1,120 @@
+query orderInfo($orderId: ID!) {
+  order(id: $orderId) {
+    id
+    name
+    email
+    tags
+    displayFinancialStatus
+    createdAt
+    taxLines {
+      ratePercentage
+    }
+    transactions {
+      gateway
+    }
+    totalShippingPriceSet {
+      presentmentMoney {
+        amount
+      }
+    }
+    totalPriceSet {
+      presentmentMoney {
+        amount
+      }
+    }
+    lineItems(first: 35) {
+      nodes {
+        sku,
+        originalTotalSet {
+          presentmentMoney {
+            amount
+          }
+        }
+        quantity,
+       	variant {
+          price,
+          compareAtPrice,
+          selectedOptions {
+            name,
+            value
+          }
+        },
+        product {
+          vendor
+        }
+
+      }
+    }
+    shippingAddress {
+      name
+      phone
+      address1
+      city
+      zip
+      province
+      countryCodeV2
+    }
+    billingAddress {
+      name
+      phone
+      address1
+      city
+      zip
+      province
+      countryCodeV2
+    }
+  }
+}
+
+
+mutation ActivateInventoryItem($inventoryItemId: ID!, $locationId: ID!, $available: Int) {
+  inventoryActivate(inventoryItemId: $inventoryItemId, locationId: $locationId, available: $available) {
+    inventoryLevel {
+      id
+      quantities(names: ["available"]) {
+        name
+        quantity
+      }
+      item {
+        id
+      }
+      location {
+        id
+      }
+    }
+  }
+}
+mutation collectionReorderProducts($id: ID!, $moves: [MoveInput!]!) {
+  collectionReorderProducts(id: $id, moves: $moves) {
+    userErrors {
+      field
+      message
+    }
+  }
+}
+
+query getOrderByName($name: String!) {
+  orders(first: 1, query: $name) {
+    edges {
+      node {
+        id
+        name
+      }
+    }
+  }
+}
+
+query getProductIdBySKU($sku: String!) {
+  productVariants(first: 1, query: $sku) {
+    edges {
+      node {
+        id
+        sku
+        product {
+          id
+          title
+        }
+      }
+    }
+  }
+}
