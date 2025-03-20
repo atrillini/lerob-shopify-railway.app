@@ -165,7 +165,7 @@ def getMappedData(orderInfo,p):
 #def sendFileToServer(fobj):
 
 
-def process_orders(blob,bucket):
+def process_orders():
 
     host = "93.147.145.116"
     user = "magento"
@@ -270,6 +270,6 @@ def process_orders(blob,bucket):
     return "{ordini importati correttamente}"
               
        
-
+process_orders()
 
 
