@@ -8,3 +8,4 @@ google-cloud-storage
 gspread
 oauth2client
 xmltodict
+minio
