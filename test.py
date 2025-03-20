@@ -11,7 +11,7 @@ minio_client = Minio(
 )
 
 # Nome del bucket da usare
-bucket_name = "orders-bucket"
+bucket_name = "lerob-orders"
 
 # Funzione per creare un bucket se non esiste
 def create_bucket():
@@ -67,9 +67,40 @@ def get_presigned_url():
     except S3Error as err:
         print(f"Errore nella generazione dell'URL: {err}")
 
+# Funzione per creare e caricare un file
+def create_and_upload_file():
+    try:
+        # Crea un file temporaneo
+        local_file = "/tmp/test-file.txt"  # Usa /tmp per filesystem temporaneo su Railway
+        content = "Questo è un file di test creato con Python!"
+        
+        # Scrivi il file localmente
+        with open(local_file, "w") as f:
+            f.write(content)
+        
+        # Carica il file su MinIO
+        object_name = "test-file.txt"
+        minio_client.fput_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            file_path=local_file
+        )
+        print(f"File '{object_name}' caricato con successo in '{bucket_name}'.")
+        
+        # Pulisci (opzionale)
+        os.remove(local_file)
+    except S3Error as err:
+        print(f"Errore nel caricamento del file: {err}")
+    except OSError as err:
+        print(f"Errore nella creazione del file: {err}")
+
+# Esegui
+if __name__ == "__main__":
+    create_bucket()
+    create_and_upload_file()
+
 # Esegui le funzioni
 if __name__ == "__main__":
     create_bucket()
-    upload_file()
-    download_file()
+    create_and_upload_file()
     get_presigned_url()
