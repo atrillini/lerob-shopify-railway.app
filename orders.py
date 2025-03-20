@@ -8,7 +8,8 @@ from time import sleep
 import pandas as pd
 from datetime import date, timedelta
 from ftplib import FTP
-
+from minio import Minio
+from minio.error import S3Error
 
 
 cfg = {
@@ -185,6 +186,17 @@ def process_orders(blob,bucket):
     }
     }
 
+     # Configura il client MinIO
+    minio_client = Minio(
+              endpoint="bucket-production-51bd.up.railway.app:443",  # Solo il dominio, senza https://
+              access_key=os.getenv("MINIO_ROOT_USER"),       # Credenziali da variabili d'ambiente
+              secret_key=os.getenv("MINIO_ROOT_PASSWORD"),
+              secure=True                                    # True per HTTPS (Railway usa 443)
+          )
+
+     # Nome del bucket da usare
+    bucket_name = "lerob-orders"
+
    
     conn = dbConnect(cfg['mysql'])
     cur = conn.cursor()
@@ -213,9 +225,10 @@ def process_orders(blob,bucket):
         # create the csv writer
         #f = open('orders_to_adhoc/'+orderInfo['name'].replace('#','')+'.csv', 'w')
         #writer = csv.writer(f, delimiter=';')
-        blob_order = bucket.blob(orderInfo['name'].replace('#','')+'.csv')
-        output = io.StringIO()
-        writer = csv.writer(output, delimiter =';', quoting=csv.QUOTE_NONE)
+       
+        local_file = "/tmp/"+orderInfo['name'].replace('#','')+'.csv
+        f = open(local_file, 'w')
+        writer = csv.writer(f, delimiter=';')
         
         
 
@@ -229,17 +242,21 @@ def process_orders(blob,bucket):
             #write_to_file(mappedData, blob_order)
             # set public access
 
-        blob_order.upload_from_string(output.getvalue(), content_type='text/csv')
-        blob_order.acl.reload()
-        acl = blob_order.acl
-        acl.all().grant_read()
-        acl.save()
+        # Carica il file su MinIO
+        object_name = orderInfo['name'].replace('#','')+'.csv
+        minio_client.fput_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            file_path=local_file
+        )
+        print(f"File '{object_name}' caricato con successo in '{bucket_name}'.")
+        
         ftp = FTP(host)
         ftp.login(user,password)
         ftp.cwd('magento/ORDINI')
        
         filename = orderInfo['name'].replace('#','')+'.csv'
-        with blob_order.open("rb") as file:
+        with local_file.open("rb") as file:
             ftp.storbinary("STOR " + filename,file)
         
         ftp.quit()
