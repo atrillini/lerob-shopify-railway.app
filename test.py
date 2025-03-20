@@ -54,19 +54,6 @@ def download_file():
     except S3Error as err:
         print(f"Errore nello scaricamento del file: {err}")
 
-# Funzione per ottenere un URL temporaneo
-def get_presigned_url():
-    try:
-        url = minio_client.presigned_get_object(
-            bucket_name=bucket_name,
-            object_name="file.txt",
-            expires=24*60*60  # URL valido per 24 ore
-        )
-        print(f"URL temporaneo: {url}")
-        return url
-    except S3Error as err:
-        print(f"Errore nella generazione dell'URL: {err}")
-
 # Funzione per creare e caricare un file
 def create_and_upload_file():
     try:
@@ -103,4 +90,3 @@ if __name__ == "__main__":
 if __name__ == "__main__":
     create_bucket()
     create_and_upload_file()
-    get_presigned_url()
