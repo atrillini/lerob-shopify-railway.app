@@ -245,7 +245,7 @@ def process_orders(blob,bucket):
             # set public access
 
         # Carica il file su MinIO
-        object_name = orderInfo['name'].replace('#','')+'.csv
+        object_name = orderInfo['name'].replace('#','')+'.csv'
         minio_client.fput_object(
             bucket_name=bucket_name,
             object_name=object_name,
