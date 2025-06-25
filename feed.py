@@ -66,8 +66,8 @@ def generateFeed(prods):
         if priceData['compare'] and float(priceData['compare']) > 0:
             feed += '<product_price>' + priceData['compare'] + '</product_price>'
             feed += '<discount>'
-            feed += '<startdate>1719370800</startdate>'
-            feed += '<stopdate>1721771999</stopdate>'
+            feed += '<startdate>1749672748</startdate>'
+            feed += '<stopdate>1753992748</stopdate>'
             feed += '<price_discount>' + priceData['price'] + '</price_discount>'
             feed += '<sales>1</sales>'
             feed += '</discount>'
