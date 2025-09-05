@@ -266,7 +266,7 @@ def process_orders():
         print('file ordine ' + orderInfo['name'] +  ' -> ' + 'inviato nel server del cliente')
 
         os.remove(local_file)
-        print(f"File locale '{local_file}' rimosso.")
+        print(f"File locale '{local_file}' rimosso. Attenzione")
        
 
         dbAddOrder(conn, cur, (o.id, orderInfo['name'], orderInfo['email'],orderInfo['totalPriceSet']['presentmentMoney']['amount'], orderInfo['createdAt'], '1'))
