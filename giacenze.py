@@ -200,7 +200,7 @@ for key in stocks:
             data['inv_id'] = resvariant[2]
             data['qty'] = sizes['qty'] 
            
-            print(bcolors.OKGREEN + 'aggiorno giacenza prodotto ' + str(resvariant[5]) +  ' -> ' + 'nuova giacenza ' + str(data['qty']) +  bcolors.ENDC)
+            print(bcolors.OKGREEN + 'aggiorno la giacenza prodotto ' + str(resvariant[5]) +  ' -> ' + 'nuova giacenza ' + str(data['qty']) +  bcolors.ENDC)
             shopify.update_stock(data['inv_id'],data['qty'])
             dbUpdateQtytocks(dbconn,cur,resvariant[1],data['qty'])
             requests.delete('http://93.147.145.116:11111/SRWebApi/api/SALDI/'+str(idgestionale))
