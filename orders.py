@@ -207,7 +207,7 @@ def process_orders():
     
     for o in ords:
 
-        if o.financial_status not in ['paid', 'authorized']:
+        if o.financial_status not in ['paid', 'authorized','pending']:
             continue
         
         #if o.name != '#1603': 
