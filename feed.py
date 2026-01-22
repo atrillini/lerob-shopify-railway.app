@@ -60,7 +60,7 @@ def generateFeed(prods):
         feed += '<product>'
         
         feed += '<reference_partenaire>' + sku + '</reference_partenaire>'
-        feed += '<product_name><![CDATA[' + namePr + ']]</product_name>'
+        feed += '<product_name><![CDATA[' getCommName(prod.metafields()) ']]</product_name>'
         feed += '<manufacturers_name><![CDATA[' + prod.vendor + ']]</manufacturers_name>'
         feed += '<product_sex>' + getGender(sku) + '</product_sex>'
         if priceData['compare'] and float(priceData['compare']) > 0:
@@ -84,7 +84,7 @@ def generateFeed(prods):
             
             if(lang == 'IT'):
                 feed += '<product_description><![CDATA[' + soup + ']]</product_description>'
-                feed += '<product_name><![CDATA[' + namePr + ']]</product_name>'
+                feed += '<product_name><![CDATA[' + getCommName(prod.metafields()) + ']]</product_name>'
             else:
                 feed += '<product_description></product_description>'
                 feed += '<product_name></product_name>'
@@ -185,6 +185,12 @@ def getGenderName(sku):
     if gcode == 'U':
         return 'Unisex'
     return gcode
+
+def getCommName(metafields):
+    for m in metafields:
+        if m.key == 'commercialname':
+            return m.value
+    return ''
 
 def getPrice(variants):
     if not variants:
