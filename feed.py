@@ -60,7 +60,7 @@ def generateFeed(prods):
         feed += '<product>'
         
         feed += '<reference_partenaire>' + sku + '</reference_partenaire>'
-        feed += '<product_name><![CDATA[' getCommName(prod.metafields()) ']]</product_name>'
+        feed += '<product_name><![CDATA[' +getCommName(prod.metafields())+ ']]</product_name>'
         feed += '<manufacturers_name><![CDATA[' + prod.vendor + ']]</manufacturers_name>'
         feed += '<product_sex>' + getGender(sku) + '</product_sex>'
         if priceData['compare'] and float(priceData['compare']) > 0:
