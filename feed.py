@@ -60,8 +60,8 @@ def generateFeed(prods):
         feed += '<product>'
         
         feed += '<reference_partenaire>' + sku + '</reference_partenaire>'
-        feed += '<product_name><![CDATA[' +getCommName(prod.metafields())+ ']]</product_name>'
-        feed += '<manufacturers_name><![CDATA[' + prod.vendor + ']]</manufacturers_name>'
+        feed += '<product_name>![CDATA[' +getCommName(prod.metafields())+ ']]</product_name>'
+        feed += '<manufacturers_name>![CDATA[' + prod.vendor + ']]</manufacturers_name>'
         feed += '<product_sex>' + getGender(sku) + '</product_sex>'
         if priceData['compare'] and float(priceData['compare']) > 0:
             feed += '<product_price>' + priceData['compare'] + '</product_price>'
@@ -75,7 +75,7 @@ def generateFeed(prods):
             feed += '<product_price>' + priceData['price'] + '</product_price>'
         feed += '<product_quantity>' + getQuantity(prod.variants) + '</product_quantity>'
         feed += '<color_id></color_id>'
-        feed += '<product_style><![CDATA[' + str(codeSpartoo) + ']]></product_style>'
+        feed += '<product_style>![CDATA[' + str(codeSpartoo) + ']]></product_style>'
         feed += '<languages>'
        
         for lang in ['IT','FR','ES','DE']:
@@ -83,8 +83,8 @@ def generateFeed(prods):
             feed += '<code>' + lang + '</code>'
             
             if(lang == 'IT'):
-                feed += '<product_description><![CDATA[' + soup + ']]</product_description>'
-                feed += '<product_name><![CDATA[' + getCommName(prod.metafields()) + ']]</product_name>'
+                feed += '<product_description>![CDATA[' + soup + ']]</product_description>'
+                feed += '<product_name>![CDATA[' + getCommName(prod.metafields()) + ']]</product_name>'
             else:
                 feed += '<product_description></product_description>'
                 feed += '<product_name></product_name>'
