@@ -61,7 +61,7 @@ def getSOrdersDe():
     data = {
         'partner': LEROB_ID, 
         'date': target_date.strftime("%Y-%m-%d:00:00:00"),
-        'status': '2'
+        'status': '11'
     }
     res = requests.post(URL_SPARTOO_DE, params=data)
     return xmltodict.parse(res.content)['root']['orders']
@@ -283,8 +283,8 @@ if(ordsDe) :
             
             for order in orders:
                         
-                if order['orders_id'] != '2000051199898648':
-                     continue
+                #if order['orders_id'] != '2000051199898648':
+                     #continue
                        
                 products = order.get("products", {}).get("product", [])
                 if isinstance(products, dict):
@@ -389,5 +389,6 @@ if(ordsEs) :
 
 else:
     print('nessun ordine ES da processare')
+
 
 
