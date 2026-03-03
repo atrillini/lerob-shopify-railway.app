@@ -225,8 +225,8 @@ if(ordsFr) :
             
             for order in orders:
                 
-                print(order)
-                exit()
+                if(order['orders_id'] != '2000047567499648') :
+                    continue
                 
                        
                 products = order.get("products", {}).get("product", [])
@@ -391,6 +391,7 @@ if(ordsEs) :
 
 else:
     print('nessun ordine ES da processare')
+
 
 
 
