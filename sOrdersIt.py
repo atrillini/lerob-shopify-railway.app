@@ -72,7 +72,7 @@ def getSOrdersFr():
     data = {
         'partner': LEROB_ID, 
         'date': target_date.strftime("%Y-%m-%d:00:00:00"),
-        'status': '11'
+        'status': '2'
     }
     res = requests.post(URL_FR, params=data)
     return xmltodict.parse(res.content)['root']['orders']
@@ -224,7 +224,8 @@ if(ordsFr) :
                 orders = [orders]  # Convertiamo in lista per uniformità
             
             for order in orders:
-                        
+                print(order)
+                exit()
                 
                        
                 products = order.get("products", {}).get("product", [])
@@ -389,6 +390,7 @@ if(ordsEs) :
 
 else:
     print('nessun ordine ES da processare')
+
 
 
 
