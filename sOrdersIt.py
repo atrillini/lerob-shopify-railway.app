@@ -224,6 +224,7 @@ if(ordsFr) :
                 orders = [orders]  # Convertiamo in lista per uniformità
             
             for order in orders:
+                
                 print(order)
                 exit()
                 
@@ -390,6 +391,7 @@ if(ordsEs) :
 
 else:
     print('nessun ordine ES da processare')
+
 
 
 
