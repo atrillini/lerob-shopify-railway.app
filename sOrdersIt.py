@@ -72,7 +72,7 @@ def getSOrdersFr():
     data = {
         'partner': LEROB_ID, 
         'date': target_date.strftime("%Y-%m-%d:00:00:00"),
-        'status': '2'
+        'status': '11'
     }
     res = requests.post(URL_FR, params=data)
     return xmltodict.parse(res.content)['root']['orders']
@@ -225,8 +225,8 @@ if(ordsFr) :
             
             for order in orders:
                 
-                if(order['orders_id'] != '2000044956880748') :
-                    continue
+                #if(order['orders_id'] != '2000044956880748') :
+                    #continue
                 
                        
                 products = order.get("products", {}).get("product", [])
