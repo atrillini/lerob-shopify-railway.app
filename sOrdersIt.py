@@ -151,6 +151,8 @@ ordsIt = getSOrdersIta()
 ordsFr = getSOrdersFr()
 ordsDe = getSOrdersDe()
 ordsEs = getSOrdersEs()
+print(ordsFr)
+exit()
 
 shopify = Sh()
 #shopify.createOrder(ords)
